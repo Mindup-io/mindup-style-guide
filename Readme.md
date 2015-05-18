@@ -1,14 +1,10 @@
 # Node.js Style Guide
 
-This is a guide for writing consistent and aesthetically pleasing node.js code.
+This is a guide for writing consistent and aesthetically pleasing MindUp code.
 It is inspired by what is popular within the community, and flavored with some
 personal opinions.
 
-There is a .jshintrc which enforces these rules as closely as possible. You can
-either use that and adjust it, or use
-[this script](https://gist.github.com/kentcdodds/11293570) to make your own.
-
-This guide was created by [Felix Geisendörfer](http://felixge.de/) and is
+This guide was first created by [Felix Geisendörfer](http://felixge.de/) and is
 licensed under the [CC BY-SA 3.0](http://creativecommons.org/licenses/by-sa/3.0/)
 license. You are encouraged to fork this repository and make adjustments
 according to your preferences.
@@ -17,28 +13,35 @@ according to your preferences.
 
 ## Table of contents
 
-* [2 Spaces for indention](#2-spaces-for-indention)
+* [Use JSHint](#use-jshint)
+* [4 Spaces for indention](#4-spaces-for-indention)
 * [Newlines](#newlines)
 * [No trailing whitespace](#no-trailing-whitespace)
 * [Use Semicolons](#use-semicolons)
 * [80 characters per line](#80-characters-per-line)
 * [Use single quotes](#use-single-quotes)
-* [Opening braces go on the same line](#opening-braces-go-on-the-same-line)
+* [Opening braces](#opening-braces)
 * [Method chaining](#method-chaining)
-* [Declare one variable per var statement](#declare-one-variable-per-var-statement)
+* [Variable declaration](#variable-declaration)
+* [Error first callback are prefered](#error-first-callback-are-prefered)
 * [Use lowerCamelCase for variables, properties and function names](#use-lowercamelcase-for-variables-properties-and-function-names)
 * [Use UpperCamelCase for class names](#use-uppercamelcase-for-class-names)
 * [Use UPPERCASE for Constants](#use-uppercase-for-constants)
-* [Object / Array creation](#object--array-creation)
 * [Use the === operator](#use-the--operator)
-* [Use multi-line ternary operator](#use-multi-line-ternary-operator)
 * [Use slashes for comments](#use-slashes-for-comments)
 * [Object.freeze, Object.preventExtensions, Object.seal, with, eval](#objectfreeze-objectpreventextensions-objectseal-with-eval)
 * [Getters and setters](#getters-and-setters)
 
-## 2 Spaces for indention
+## Use JSHint
 
-Use 2 spaces for indenting your code and swear an oath to never mix tabs and
+Use JSHint to check your code. JSHint plugins are available for on the fly
+verification for many editors (emacs, vim, atom, etc.). Some JSHint
+configuration files are present in the project to make JSHint automatically use
+it.
+
+## 4 Spaces for indention
+
+Use 4 spaces for indenting your code and swear an oath to never mix tabs and
 spaces - a special kind of hell is awaiting you otherwise.
 
 ## Newlines
@@ -84,7 +87,7 @@ var foo = 'bar';
 var foo = "bar";
 ```
 
-## Opening braces go on the same line
+## Opening braces
 
 Your opening braces go on the same line as the statement.
 
@@ -104,6 +107,28 @@ if (true)
   console.log('losing');
 }
 ```
+
+If the condition is multiline, open the bracket on the next line.
+
+*Right:*
+
+```js
+if (variable > otherVariable ||
+    variable <= otherVariable)
+{
+  console.log('winning');
+}
+```
+
+*Wrong:*
+
+```js
+if (variable > otherVariable ||
+    variable <= otherVariable) {
+  console.log('winning');
+}
+```
+
 
 Also, notice the use of whitespace before and after the condition statement.
 
@@ -151,12 +176,9 @@ User.findOne({ name: 'foo' }).populate('bar')
   });
 ````
 
-## Declare one variable per var statement
+## Variable declaration
 
-Declare one variable per var statement, it makes it easier to re-order the
-lines. However, ignore [Crockford][crockfordconvention] when it comes to
-declaring variables deeper inside a function, just put the declarations wherever
-they make sense.
+You can declare ether one variable per line or many.
 
 *Right:*
 
@@ -171,7 +193,7 @@ while (keys.length) {
 }
 ```
 
-*Wrong:*
+*Also right:*
 
 ```js
 var keys = ['foo', 'bar'],
@@ -183,6 +205,24 @@ while (keys.length) {
   key = keys.pop();
   object[key] = values.pop();
 }
+```
+
+## Error first callback are prefered
+
+Prefer to use the error first callback pattern common in node.js code.
+
+*Right:*
+
+```js
+fs.readFile('/foo.txt', function(err, data) {
+  // If an error occurred, handle it (throw, propagate, etc)
+  if(err) {
+    console.log('Unknown Error');
+    return;
+  }
+  // Otherwise, log the file contents
+  console.log(data);
+});
 ```
 
 [crockfordconvention]: http://javascript.crockford.com/code.html
@@ -254,32 +294,6 @@ File.fullPermissions = 0777;
 
 [const]: https://developer.mozilla.org/en/JavaScript/Reference/Statements/const
 
-## Object / Array creation
-
-Use trailing commas and put *short* declarations on a single line. Only quote
-keys when your interpreter complains:
-
-*Right:*
-
-```js
-var a = ['hello', 'world'];
-var b = {
-  good: 'code',
-  'is generally': 'pretty',
-};
-```
-
-*Wrong:*
-
-```js
-var a = [
-  'hello', 'world'
-];
-var b = {"good": 'code'
-        , is generally: 'pretty'
-        };
-```
-
 ## Use the === operator
 
 Programming is not about remembering [stupid rules][comparisonoperators]. Use
@@ -305,24 +319,6 @@ if (a == '') {
 ```
 
 [comparisonoperators]: https://developer.mozilla.org/en/JavaScript/Reference/Operators/Comparison_Operators
-
-## Use multi-line ternary operator
-
-The ternary operator should not be used on a single line. Split it up into multiple lines instead.
-
-*Right:*
-
-```js
-var foo = (a === b)
-  ? 1
-  : 2;
-```
-
-*Wrong:*
-
-```js
-var foo = (a === b) ? 1 : 2;
-```
 
 ## Do not extend built-in prototypes
 
@@ -375,9 +371,7 @@ if (password.length >= 4 && /^(?=.*\d).{4,}$/.test(password)) {
 
 ## Write small functions
 
-Keep your functions short. A good function fits on a slide that the people in
-the last row of a big room can comfortably read. So don't count on them having
-perfect vision and limit yourself to ~15 lines of code per function.
+Keep your functions short.
 
 ## Return early from functions
 
@@ -445,32 +439,6 @@ req.on('end', function onEnd() {
 req.on('end', function() {
   console.log('losing');
 });
-```
-
-## No nested closures
-
-Use closures, but don't nest them. Otherwise your code will become a mess.
-
-*Right:*
-
-```js
-setTimeout(function() {
-  client.connect(afterConnect);
-}, 1000);
-
-function afterConnect() {
-  console.log('winning');
-}
-```
-
-*Wrong:*
-
-```js
-setTimeout(function() {
-  client.connect(function() {
-    console.log('losing');
-  });
-}, 1000);
 ```
 
 ## Use slashes for comments
