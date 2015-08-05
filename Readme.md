@@ -31,6 +31,7 @@ according to your preferences.
 * [Use slashes for comments](#use-slashes-for-comments)
 * [Object.freeze, Object.preventExtensions, Object.seal, with, eval](#objectfreeze-objectpreventextensions-objectseal-with-eval)
 * [Getters and setters](#getters-and-setters)
+* [Other](#other)
 
 ## Use JSHint
 
@@ -454,3 +455,7 @@ Feel free to use getters that are free from [side effects][sideeffect], like
 providing a length property for a collection class.
 
 [sideeffect]: http://en.wikipedia.org/wiki/Side_effect_(computer_science)
+
+## Other
+
+For all other things not mentioned, just try to be coherent with the rest of the code.
