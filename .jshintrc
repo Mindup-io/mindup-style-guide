@@ -9,7 +9,6 @@
   "maxdepth": 3,
   "nonbsp": true,
   "node": true,
-  "curly": true
-  //"maxlen": 80
-  //"eqeqeq": true
+  "curly": true,
+  "maxlen": 80
 }
