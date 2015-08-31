@@ -4,5 +4,12 @@
   "indent": 4,
   "quotmark": "single",
   "trailing": true,
+  "curly": true,
+  "latedef": "nofunc",
+  "maxdepth": 3,
+  "nonbsp": true,
+  "node": true,
   "curly": true
+  //"maxlen": 80
+  //"eqeqeq": true
 }
